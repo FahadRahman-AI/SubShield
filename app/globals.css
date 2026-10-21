@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+/*
+  Design system: warm editorial. Square corners, flat stacked panels,
+  one charcoal ink, a tight neo-grotesk (Switzer) and pastel accent tiles.
+*/
+@theme {
+  /* Surfaces, lightest → darkest */
+  --color-page: #f1eee9;
+  --color-panel: #e7e2da;
+  --color-panel-2: #d7d1c7;
+  --color-sand: #cdc0b0;
+
+  /* Ink */
+  --color-ink: #3c3c3c;
+  /* Secondary text. ≥4.5:1 on page (6.4), panel (5.8) and panel-2 (4.9);
+     on sand it's 4.2, so text on sand uses ink. */
+  --color-dim: #555555;
+  --color-faint: rgb(60 60 60 / 0.4); /* decorative only */
+  --color-line: rgb(60 60 60 / 0.12);
+
+  /* Semantic: indicator hues for marks, darker "-ink" steps for text */
+  --color-leak: #dc5b5b;
+  --color-leak-ink: #a8382f;
+  --color-save: #88c159;
+  --color-save-ink: #47731f;
+  --color-insight: #8f80dc;
+  --color-insight-ink: #5a4bb0;
+  --color-warn: #f6d45d;
+  --color-warn-ink: #7f6100;
+
+  /* Accent tiles */
+  --color-coral: #f6825d;
+  --color-mustard: #f6d45d;
+  --color-lime: #cef65d;
+  --color-lavender: #b9aeea;
+  --color-sky: #a9d4ea;
+  --color-olive: #a5ae74;
+  --color-butter: #f4e48a;
+  --color-blush: #f2bba6;
+
+  --font-sans: var(--font-switzer), ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-switzer), ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --ease-cascade: cubic-bezier(0.65, 0, 0.25, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-marquee: marquee 60s linear infinite;
+  --animate-fade-in: fade-in 0.25s ease-out;
+  --animate-dialog-in: dialog-in 0.5s var(--ease-out-expo);
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  /* Tailwind v4 centers with the `translate` property, so animate `transform` only. */
+  @keyframes dialog-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+}
+
+@keyframes expand {
+  from { height: 0; opacity: 0; }
+  to { height: var(--radix-accordion-content-height); opacity: 1; }
+}
+@keyframes collapse {
+  from { height: var(--radix-accordion-content-height); opacity: 1; }
+  to { height: 0; opacity: 0; }
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  background: var(--color-page);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-mustard);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+/* Type scale — one weight for headings, tight tracking, line-height 1. */
+@utility type-hero {
+  font-weight: 600;
+  font-size: clamp(2.6rem, 3.6vw + 0.9rem, 4.25rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+@utility type-display {
+  font-weight: 600;
+  font-size: clamp(2.2rem, 3vw + 0.8rem, 3.75rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+@utility type-title {
+  font-weight: 600;
+  font-size: clamp(1.5rem, 0.8vw + 1.15rem, 1.875rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+@utility type-label {
+  font-size: 0.844rem;
+  line-height: 1.25;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+@utility gutter {
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.875rem;
+  }
+}
+
+@utility mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+/* The user-facing "Motion: Low" switch (like reduced motion, but opt-in). */
+html[data-motion="low"] *,
+html[data-motion="low"] *::before,
+html[data-motion="low"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
