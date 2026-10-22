@@ -108,7 +108,7 @@ export function CheckAndAsk() {
             <span className="tabular text-[19px] font-semibold tracking-[-0.03em]">{formatMoney(Math.round(result.yearly))}/yr</span>
           </p>
           <p className="mt-1 flex items-baseline justify-between">
-            <span className="text-dim">Overlap you could cut</span>
+            <span className="text-dim">Overlap you could cut (typical prices)</span>
             <span className="tabular text-[19px] font-semibold tracking-[-0.03em] text-leak-ink">{formatMoney(Math.round(result.savings))}/yr</span>
           </p>
           <ul className="mt-3 space-y-1 text-dim">

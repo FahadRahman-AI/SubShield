@@ -1,12 +1,14 @@
 'use client'
 
 import { Check, Loader2, ShieldCheck } from 'lucide-react'
+import Link from 'next/link'
 import { createContext, use, useState, useTransition, type ComponentProps, type ReactNode } from 'react'
 import { toast } from 'sonner'
 import { BillingToggle } from '@/components/landing/pricing'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { startCheckout } from '@/lib/actions/billing'
+import { RENEWAL_REMINDER_DAYS } from '@/lib/legal'
 import { PRICING, PRO_FEATURES } from '@/lib/pricing'
 import { formatMoney } from '@/lib/utils'
 import { track } from '@/lib/analytics'
@@ -64,7 +66,7 @@ export function UpgradeProvider({ children, yearlyWaste, leakCount }: { children
         <DialogContent title="Unlock every leak" description={reason ?? 'See every leak, cancel in one click, and keep new ones from sneaking in.'} className="max-w-xl">
           {yearlyWaste > 0 ? (
             <p className="mt-6 bg-coral px-4 py-3 text-[14px]">
-              <span className="font-semibold">{formatMoney(Math.round(yearlyWaste))}/yr</span> is leaking across {leakCount} subscriptions.
+              An estimated <span className="font-semibold">{formatMoney(Math.round(yearlyWaste))}/yr</span> is leaking across {leakCount} subscriptions.
               {multiple >= 2 ? ` That’s ${multiple}× the cost of Pro.` : null}
             </p>
           ) : null}
@@ -88,7 +90,17 @@ export function UpgradeProvider({ children, yearlyWaste, leakCount }: { children
             ))}
           </ul>
 
-          <Button size="lg" className="mt-7 w-full" onClick={checkout} disabled={pending}>
+          <p className="type-label mt-7 text-dim">
+            {period === 'yearly'
+              ? `Renews automatically every year at ${PRICING.yearly.label} until you cancel. We email you ${RENEWAL_REMINDER_DAYS} days before each renewal.`
+              : `Renews automatically every month at ${PRICING.monthly.label} until you cancel.`}{' '}
+            Cancel any time in one click. By upgrading you agree to the{' '}
+            <Link href="/legal/terms" className="underline underline-offset-2">
+              Terms
+            </Link>
+            .
+          </p>
+          <Button size="lg" className="mt-3 w-full" onClick={checkout} disabled={pending}>
             {pending ? <Loader2 className="animate-spin" /> : null}
             {pending ? 'Opening secure checkout…' : `Unlock Pro — ${price.label}${price.per}`}
           </Button>

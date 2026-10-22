@@ -31,6 +31,25 @@ npm run build
 6. **Inbox (optional)** — Google OAuth client with the `gmail.readonly` scope and redirect `<APP_URL>/api/connect/google/callback`; Microsoft app with `Mail.Read` and redirect `<APP_URL>/api/connect/microsoft/callback`. Note: `gmail.readonly` is a restricted scope — production use requires Google's security assessment.
 7. **Cron** — `vercel.json` runs `/api/cron/renewal-alerts` daily; set `CRON_SECRET`.
 
+## Compliance checklist
+
+Built in the app:
+
+- Privacy Policy (`/legal/privacy`) and Terms (`/legal/terms`) — drafts. Fill in your company details in `lib/legal.ts` (the pages show a "draft" banner until you do) and have a UK solicitor review them before taking payments.
+- Account deletion (cancels Stripe, revokes Plaid/Google, erases all rows) and a JSON data export — Plan & alerts → Your data.
+- A tick-box authorisation before every emailed cancellation letter, recorded in `cancellation_logs.consented_at`.
+- Auto-renewal disclosure in the upgrade dialog and on Stripe Checkout, and a reminder email 30 days before a yearly plan renews (`lib/billing/renewal-reminders.ts`, runs in the daily cron).
+- Waste figures labelled as estimates.
+- Bank connections limited to US banks (`lib/integrations/plaid.ts`); UK/EEA visitors see why (`lib/geo.ts`).
+
+Yours to do:
+
+- Form the company, pay the ICO data protection fee, then fill in `lib/legal.ts`.
+- Apply `supabase/migrations/20261023000000_compliance.sql` after the initial migration.
+- Accept each provider's data processing agreement (Supabase, Vercel, Stripe, Resend, Plaid, Sentry, PostHog).
+- Write a short data protection impact assessment and a breach-response plan.
+- Note: the data export includes detected subscriptions (they're personal data), so a free user can see the full list there. Ask your solicitor whether to limit derived analysis in exports.
+
 ## Deploying to Vercel
 
 1. Push this repo to GitHub, then **Add New → Project** in Vercel and import it. The framework preset (Next.js) and build command are detected automatically; Node 20.9+ is pinned in `package.json`.

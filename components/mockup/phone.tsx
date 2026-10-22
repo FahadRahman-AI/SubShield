@@ -90,7 +90,7 @@ export function LeakReportScreen() {
         <span className="grid size-7 place-items-center rounded-full bg-sand text-[10px] font-semibold">AM</span>
       </div>
       <div className="px-5 pt-5">
-        <p className="text-[10px] text-dim">Yearly waste detected</p>
+        <p className="text-[10px] text-dim">Estimated yearly waste</p>
         <p className="mt-1 flex items-baseline gap-1.5 text-[44px] leading-none font-semibold tracking-[-0.05em]">
           $1,850<span className="text-[14px] font-normal tracking-normal text-dim">/yr</span>
         </p>

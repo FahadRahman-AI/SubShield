@@ -113,7 +113,7 @@ export function OverviewView({ data }: { data: DashboardData }) {
           <Tile className="lg:col-span-7">
             <Panel className="flex h-full min-h-[360px] flex-col p-6 sm:p-7">
               <div className="flex items-center justify-between">
-                <Bullet>Total yearly waste detected</Bullet>
+                <Bullet>Estimated yearly waste</Bullet>
                 <Badge tone="leak">{totals.leakCount} leaks</Badge>
               </div>
               <p className="tabular mt-auto pt-10 text-[clamp(3.5rem,8vw,6rem)] leading-none font-semibold tracking-[-0.05em]">
@@ -122,7 +122,7 @@ export function OverviewView({ data }: { data: DashboardData }) {
               </p>
               <p className="mt-4 max-w-md text-[15px] text-dim">
                 drained from {formatMoney(Math.round(totals.yearlySpend))}/yr of recurring charges — <span className="text-ink">{Math.round(wasteShare * 100)}%</span> of
-                everything you subscribe to.
+                everything you subscribe to. An estimate from your charges, not financial advice.
               </p>
               <div className="mt-6">
                 <div className="flex h-2 bg-panel-2" role="img" aria-label={`${Math.round(wasteShare * 100)}% of recurring spend is waste`}>

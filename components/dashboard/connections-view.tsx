@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Bullet, Panel } from '@/components/ui/panel'
 import { disconnect } from '@/lib/actions/connections'
 import type { ConnectionView } from '@/lib/data/types'
-import { ConnectBankButton, ConnectMailboxButtons } from './connect-flow'
+import { BankRegionNotice, ConnectBankButton, ConnectMailboxButtons } from './connect-flow'
 
 const ERRORS: Record<string, string> = {
   'google-not-configured': 'Gmail scanning isn’t configured (missing GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET).',
@@ -60,7 +60,7 @@ function ConnectionRow({ c }: { c: ConnectionView }) {
   )
 }
 
-export function ConnectionsView({ connections, demo }: { connections: ConnectionView[]; demo: boolean }) {
+export function ConnectionsView({ connections, demo, regionRestricted = false }: { connections: ConnectionView[]; demo: boolean; regionRestricted?: boolean }) {
   const params = useSearchParams()
   const shown = useRef(false)
   useEffect(() => {
@@ -88,6 +88,11 @@ export function ConnectionsView({ connections, demo }: { connections: Connection
           </div>
           <ConnectBankButton demo={demo} label={banks.length ? 'Add another account' : 'Connect bank or card'} size="md" />
         </div>
+        {regionRestricted ? (
+          <div className="mt-5">
+            <BankRegionNotice />
+          </div>
+        ) : null}
         <ul className="mt-5 space-y-[3px]">
           {banks.map((c) => (
             <ConnectionRow key={c.id} c={c} />

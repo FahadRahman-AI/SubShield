@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { Suspense } from 'react'
 import { ConnectHero } from '@/components/dashboard/connect-flow'
 import { OverviewView } from '@/components/dashboard/overview-view'
 import { DashboardSkeleton } from '@/components/dashboard/skeletons'
 import { requireViewer } from '@/lib/auth'
 import { getDashboard } from '@/lib/data/dashboard'
+import { isBankRegionRestricted, visitorCountry } from '@/lib/geo'
 
 export const metadata: Metadata = { title: 'Overview' }
 
@@ -19,6 +21,6 @@ export default function DashboardPage() {
 async function Overview() {
   const viewer = await requireViewer()
   const data = await getDashboard(viewer)
-  if (!data.hasData) return <ConnectHero demo={viewer.mode === 'demo'} />
+  if (!data.hasData) return <ConnectHero demo={viewer.mode === 'demo'} regionRestricted={isBankRegionRestricted(visitorCountry(await headers()))} />
   return <OverviewView data={data} />
 }

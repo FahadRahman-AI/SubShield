@@ -208,7 +208,7 @@ export function LeakList({
                 {lockedLeaks} more {lockedLeaks === 1 ? 'leak' : 'leaks'}
               </p>
               <p className="mt-2 text-[14px] text-dim">
-                worth <span className="tabular font-semibold text-leak-ink">{formatMoney(Math.round(hiddenWaste))}/yr</span> are hidden.
+                worth an estimated <span className="tabular font-semibold text-leak-ink">{formatMoney(Math.round(hiddenWaste))}/yr</span> are hidden.
               </p>
               <UpgradeButton className="mt-5 w-full" reason={`${lockedLeaks} more leaks worth ${formatMoney(Math.round(hiddenWaste))}/yr are waiting behind the paywall.`}>
                 Reveal all leaks

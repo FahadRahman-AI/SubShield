@@ -260,7 +260,17 @@ export function ConnectMailboxButtons({ demo, connected }: { demo: boolean; conn
   )
 }
 
-export function ConnectHero({ demo }: { demo: boolean }) {
+/** Shown to UK/EEA visitors: bank connections are US-only until open-banking cover is in place. */
+export function BankRegionNotice() {
+  return (
+    <p role="note" className="bg-mustard p-4 text-[14px] leading-relaxed">
+      Bank connections are available for <strong>US banks only</strong> for now. Connecting UK and European banks needs an open-banking licence, which we’re
+      working on. If you have a US bank account, you can still connect it.
+    </p>
+  )
+}
+
+export function ConnectHero({ demo, regionRestricted = false }: { demo: boolean; regionRestricted?: boolean }) {
   return (
     <div className="mx-auto max-w-6xl py-6 sm:py-12">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: EASE }}>
@@ -279,6 +289,11 @@ export function ConnectHero({ demo }: { demo: boolean }) {
               <li>Disconnect any time — the data is deleted.</li>
             </ul>
             <div className="mt-auto pt-10">
+              {regionRestricted ? (
+                <div className="mb-px">
+                  <BankRegionNotice />
+                </div>
+              ) : null}
               <ConnectBankButton demo={demo} className="w-full" />
               <p className="type-label mt-3 text-dim">{demo ? 'Demo mode: runs the real engine on a seeded 14-month ledger.' : 'Via Plaid · 12,000+ institutions'}</p>
             </div>

@@ -39,6 +39,8 @@ const SendInput = z.object({
   subject: z.string().min(5).max(200),
   body: z.string().min(40).max(6000),
   region: z.enum(['US', 'UK', 'EU', 'CA', 'AU']),
+  /** The user ticked "I authorise SubShield to send this on my behalf". Required to email a vendor. */
+  consent: z.boolean(),
 })
 
 const DAILY_SEND_LIMIT = 10
@@ -53,8 +55,10 @@ export async function sendCancellation(input: z.infer<typeof SendInput>): Promis
   if (!viewer.isPro) return { ok: false, error: 'Sending cancellations is a Pro feature.', paywall: true }
   const parsed = SendInput.safeParse(input)
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? 'Invalid request.' }
-  const { id, method, recipient, subject, body, region } = parsed.data
+  const { id, method, recipient, subject, body, region, consent } = parsed.data
   if (method === 'email' && !recipient) return { ok: false, error: 'Add the vendor’s support email address.' }
+  // We only ever send on the user's explicit, per-letter authority.
+  if (method === 'email' && !consent) return { ok: false, error: 'Tick the box to authorise us to send this request for you.' }
 
   const sub = await getSubscriptionForViewer(viewer, id)
   if (!sub) return { ok: false, error: 'Subscription not found.' }
@@ -93,6 +97,7 @@ export async function sendCancellation(input: z.infer<typeof SendInput>): Promis
     user_id: viewer.id,
     subscription_id: sub.id,
     method,
+    consented_at: method === 'email' ? new Date().toISOString() : null,
     status: 'sent',
     recipient: recipient ?? null,
     subject,

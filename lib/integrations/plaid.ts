@@ -30,7 +30,9 @@ export async function createLinkToken(userId: string): Promise<string> {
     client_name: 'SubShield',
     products: [Products.Transactions],
     transactions: { days_requested: 730 },
-    country_codes: [CountryCode.Us, CountryCode.Ca, CountryCode.Gb],
+    // US banks only. Open banking in the UK/EU is a regulated activity (account
+    // information services); add GB/EU here only once that cover is in place.
+    country_codes: [CountryCode.Us],
     language: 'en',
     webhook: `${env.appUrl}/api/plaid/webhook`,
   })

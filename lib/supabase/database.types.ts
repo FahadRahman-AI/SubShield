@@ -24,6 +24,7 @@ export interface Database {
           alert_email: boolean
           alert_sms: boolean
           phone: string | null
+          renewal_reminder_for: Timestamp | null
           created_at: Timestamp
         }
         Insert: {
@@ -40,6 +41,7 @@ export interface Database {
           alert_email?: boolean
           alert_sms?: boolean
           phone?: string | null
+          renewal_reminder_for?: Timestamp | null
           created_at?: Timestamp
         }
         Update: Partial<Database['public']['Tables']['profiles']['Insert']>
@@ -233,6 +235,7 @@ export interface Database {
           provider_message_id: string | null
           sent_at: Timestamp | null
           confirmed_at: Timestamp | null
+          consented_at: Timestamp | null
           created_at: Timestamp
         }
         Insert: {
@@ -248,6 +251,7 @@ export interface Database {
           provider_message_id?: string | null
           sent_at?: Timestamp | null
           confirmed_at?: Timestamp | null
+          consented_at?: Timestamp | null
           created_at?: Timestamp
         }
         Update: Partial<Database['public']['Tables']['cancellation_logs']['Insert']>

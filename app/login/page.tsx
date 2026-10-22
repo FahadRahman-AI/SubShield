@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { Suspense } from 'react'
 import { LoginForm } from '@/components/auth/login-form'
 import { Logo } from '@/components/brand/logo'
@@ -19,7 +20,17 @@ export default function LoginPage() {
             <LoginForm demo={isDemo} />
           </Suspense>
         </div>
-        <p className="type-label text-dim">By continuing you agree to read-only access to the accounts you connect. Revoke it any time.</p>
+        <p className="type-label text-dim">
+          By continuing you agree to our{' '}
+          <Link href="/legal/terms" className="underline underline-offset-2">
+            Terms
+          </Link>{' '}
+          and{' '}
+          <Link href="/legal/privacy" className="underline underline-offset-2">
+            Privacy Policy
+          </Link>
+          . Bank access is read-only and you can revoke it any time. You must be 18 or over.
+        </p>
       </div>
       <div aria-hidden className="hidden content-center bg-panel p-[54px] lg:grid">
         <div className="grid grid-cols-3 grid-rows-[repeat(3,190px)] gap-[10px]">

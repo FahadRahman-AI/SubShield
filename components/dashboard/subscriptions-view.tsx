@@ -36,7 +36,7 @@ export function SubscriptionsView({ data }: { data: DashboardData }) {
             <h1 className="type-display">Subscriptions</h1>
             <p className="mt-3 text-dim">
               {data.totals.activeCount} recurring charges · {formatMoney(Math.round(data.totals.yearlySpend))}/yr ·{' '}
-              <span className="font-semibold text-leak-ink">{formatMoney(Math.round(data.totals.yearlyWaste))}/yr leaking</span>
+              <span className="font-semibold text-leak-ink">{formatMoney(Math.round(data.totals.yearlyWaste))}/yr estimated leaking</span>
             </p>
           </div>
           {!isPro ? <UpgradeButton>Reveal all</UpgradeButton> : null}

@@ -41,6 +41,10 @@ export function Footer() {
             <li><a href="#check" className="hover:underline">FAQ</a></li>
             <li><Link href="/login" className="hover:underline">Sign in</Link></li>
           </ul>
+          <ul className="space-y-1.5">
+            <li><Link href="/legal/privacy" className="hover:underline">Privacy</Link></li>
+            <li><Link href="/legal/terms" className="hover:underline">Terms</Link></li>
+          </ul>
         </div>
       </div>
       <p className="gutter type-label pb-8 text-dim">© 2026 SubShield. Not a bank. Bank connections by Plaid. Cancellation templates are not legal advice.</p>

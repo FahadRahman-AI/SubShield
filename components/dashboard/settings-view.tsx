@@ -11,6 +11,7 @@ import { openBillingPortal } from '@/lib/actions/billing'
 import { updateSettings } from '@/lib/actions/settings'
 import { REGIONS, type Region, type Viewer } from '@/lib/data/types'
 import { PRICING, PRO_FEATURES } from '@/lib/pricing'
+import { DataControls } from './data-controls'
 import { UpgradeButton, UpgradeProvider } from './upgrade'
 
 export function SettingsView({ viewer, yearlyWaste, leakCount }: { viewer: Viewer; yearlyWaste: number; leakCount: number }) {
@@ -122,6 +123,8 @@ export function SettingsView({ viewer, yearlyWaste, leakCount }: { viewer: Viewe
             {saving ? <Loader2 className="animate-spin" /> : null} Save settings
           </Button>
         </div>
+
+        <DataControls isPro={viewer.isPro} />
       </div>
     </UpgradeProvider>
   )

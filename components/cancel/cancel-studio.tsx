@@ -42,6 +42,7 @@ export function CancelStudio({
   const [method, setMethod] = useState<Method>(guide.channel === 'mail' ? 'letter' : 'email')
   const [region, setRegion] = useState<Region>(user.region)
   const [recipient, setRecipient] = useState('')
+  const [consent, setConsent] = useState(false)
   const template = useMemo(() => buildCancellationLetter({ sub, user, region, method, today }), [sub, user, region, method, today])
   const [subject, setSubject] = useState(template.subject)
   const [body, setBody] = useState(template.body)
@@ -67,7 +68,7 @@ export function CancelStudio({
 
   const send = () =>
     startTransition(async () => {
-      const res = await sendCancellation({ id: sub.id, method, recipient: method === 'email' ? recipient : undefined, subject, body, region })
+      const res = await sendCancellation({ id: sub.id, method, recipient: method === 'email' ? recipient : undefined, subject, body, region, consent })
       if (!res.ok) {
         toast.error(res.error)
         return
@@ -296,9 +297,24 @@ export function CancelStudio({
                   Not legal advice.
                 </p>
 
+                {method === 'email' && !locked ? (
+                  <label className="mt-5 flex cursor-pointer items-start gap-3 bg-white p-4 text-[14px] leading-relaxed">
+                    <input
+                      type="checkbox"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      className="mt-1 size-4 shrink-0 accent-[#3c3c3c]"
+                    />
+                    <span>
+                      I authorise SubShield to email this cancellation request to <strong>{recipient || 'the address above'}</strong> on my behalf, in the
+                      wording shown. It is sent from SubShield’s address with me in CC, and replies come to {user.email}.
+                    </span>
+                  </label>
+                ) : null}
+
                 <div className="mt-6 flex flex-wrap gap-px">
                   {method === 'email' ? (
-                    <Button onClick={send} disabled={locked || pending || !recipient}>
+                    <Button onClick={send} disabled={locked || pending || !recipient || !consent}>
                       {pending ? <Loader2 className="animate-spin" /> : null} {demo ? 'Send (demo)' : 'Send cancellation'}
                     </Button>
                   ) : (

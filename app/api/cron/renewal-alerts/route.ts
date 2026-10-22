@@ -1,5 +1,6 @@
 import { timingSafeEqual } from 'node:crypto'
 import { NextResponse, type NextRequest } from 'next/server'
+import { sendProRenewalReminders } from '@/lib/billing/renewal-reminders'
 import { addDays, formatShortDate, isoDate } from '@/lib/dates'
 import { env, features } from '@/lib/env'
 import { sendAlertDigest } from '@/lib/integrations/email'
@@ -78,5 +79,11 @@ export async function GET(request: NextRequest) {
       if (ok) texts++
     }
   }
-  return NextResponse.json({ ok: true, users: byUser.size, emails, texts })
+  // SubShield's own yearly plans get a renewal reminder too (a legal notice, not an alert).
+  const pro = await sendProRenewalReminders().catch((err) => {
+    console.error('[cron] pro renewal reminders', err)
+    return { sent: 0 }
+  })
+
+  return NextResponse.json({ ok: true, users: byUser.size, emails, texts, proRenewalReminders: pro.sent })
 }

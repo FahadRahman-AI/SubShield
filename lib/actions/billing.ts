@@ -5,6 +5,8 @@ import { requireViewer } from '@/lib/auth'
 import { writeDemoState } from '@/lib/demo/state'
 import { env, features } from '@/lib/env'
 import { priceIdFor, stripe } from '@/lib/integrations/stripe'
+import { RENEWAL_REMINDER_DAYS } from '@/lib/legal'
+import { PRICING } from '@/lib/pricing'
 import { createAdminClient } from '@/lib/supabase/server'
 
 type Result = { ok: true; url?: string } | { ok: false; error: string }
@@ -37,6 +39,15 @@ export async function startCheckout(plan: 'monthly' | 'yearly'): Promise<Result>
     client_reference_id: viewer.id,
     line_items: [{ price: priceIdFor(plan), quantity: 1 }],
     allow_promotion_codes: true,
+    // Auto-renewal disclosure right at the point of payment (state auto-renewal laws, UK consumer rules).
+    custom_text: {
+      submit: {
+        message:
+          plan === 'yearly'
+            ? `Renews automatically every year at $${PRICING.yearly.amount} until you cancel. We'll email you ${RENEWAL_REMINDER_DAYS} days before each renewal. Cancel any time in Plan & alerts.`
+            : `Renews automatically every month at $${PRICING.monthly.amount} until you cancel. Cancel any time in Plan & alerts.`,
+      },
+    },
     subscription_data: { metadata: { user_id: viewer.id } },
     success_url: `${env.appUrl}/dashboard?upgraded=1`,
     cancel_url: `${env.appUrl}/dashboard?checkout=cancelled`,
